@@ -63,22 +63,8 @@ print 'Jobs with no coordinates --> %d'%no_coords
 
 
 
-# load earthquake epicenters:
-# http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_week.csv
-#lats, lons = [], []
 lons = df.longitude.dropna()
 lats = df.latitude.dropna()
-
-#with open('earthquake_data.csv') as f:
-#    reader = csv.reader(f)
-#        next(reader) # Ignore the header row.
-#            for row in reader:
-#                    lat = float(row[1])
-#            lon = float(row[2])
-#            # filter lat,lons to (approximate) map view:
-#            if -130 <= lon <= -100 and 25 <= lat <= 55:
-#                        lats.append( lat )
-#                lons.append( lon )
     
     
 # Use orthographic projection centered on California with corners
@@ -90,11 +76,6 @@ m.drawcoastlines()
 m.drawcountries()
 m.drawstates()
      
-    
-        
-# ######################################################################
-# bin the epicenters (adapted from 
-# http://stackoverflow.com/questions/11507575/basemap-and-density-plots)
     
 # compute appropriate bins to chop up the data:
 db = 1 # bin padding
@@ -128,21 +109,21 @@ plt.register_cmap(cmap=custom_map)
 plt.pcolormesh(xs, ys, density, cmap="custom_map")
 
 cbar = plt.colorbar(orientation='horizontal', shrink=0.625, aspect=20, fraction=0.2,pad=0.02)
-cbar.set_label('Number of Jobs',size=18)
+cbar.set_label('Number of Jobs',size=22)
 #plt.clim([0,100])
     
     
-# translucent blue scatter plot of epicenters above histogram:    
+# translucent blue scatter plot of jobs above histogram:    
 x,y = m(list(lons), list(lats))
 m.plot(x, y, 'o', markersize=8,zorder=6, markerfacecolor='#424FA4',markeredgecolor="none", alpha=0.33)
      
         
-# http://matplotlib.org/basemap/api/basemap_api.html#mpl_toolkits.basemap.Basemap.drawmapscale
-m.drawmapscale(-119-6, 37-7.2, -119-6, 37-7.2, 500, barstyle='fancy', yoffset=20000)
+## http://matplotlib.org/basemap/api/basemap_api.html#mpl_toolkits.basemap.Basemap.drawmapscale
+#m.drawmapscale(-119-6, 37-7.2, -119-6, 37-7.2, 500, barstyle='fancy', yoffset=20000)
         
         
-# make image bigger:
-plt.gcf().set_size_inches(15,15)
+## make image bigger:
+#plt.gcf().set_size_inches(15,15)
 
 plt.savefig('heat_scatter.png')
 plt.clf()
@@ -159,11 +140,6 @@ m.drawcoastlines()
 m.drawcountries()
 m.drawstates()
      
-    
-        
-# ######################################################################
-# bin the epicenters (adapted from 
-# http://stackoverflow.com/questions/11507575/basemap-and-density-plots)
     
 # compute appropriate bins to chop up the data:
 db = 1 # bin padding
@@ -197,17 +173,17 @@ plt.register_cmap(cmap=custom_map)
 plt.pcolormesh(xs, ys, density, cmap="custom_map")
 
 cbar = plt.colorbar(orientation='horizontal', shrink=0.625, aspect=20, fraction=0.2,pad=0.02)
-cbar.set_label('Number of Jobs',size=18)
+cbar.set_label('Number of Jobs',size=22)
 #plt.clim([0,100])
     
     
-# translucent blue scatter plot of epicenters above histogram:    
+# translucent blue scatter plot of jobs above histogram:    
 x,y = m(list(lons), list(lats))
 m.plot(x, y, 'o', markersize=8,zorder=6, markerfacecolor='#424FA4',markeredgecolor="none", alpha=0.33)
      
         
-# http://matplotlib.org/basemap/api/basemap_api.html#mpl_toolkits.basemap.Basemap.drawmapscale
-m.drawmapscale(-119-6, 37-7.2, -119-6, 37-7.2, 500, barstyle='fancy', yoffset=20000)
+## http://matplotlib.org/basemap/api/basemap_api.html#mpl_toolkits.basemap.Basemap.drawmapscale
+#m.drawmapscale(-119-6, 37-7.2, -119-6, 37-7.2, 500, barstyle='fancy', yoffset=20000)
         
         
 # make image bigger:
@@ -226,12 +202,6 @@ m  = Basemap(projection='ortho',lon_0=-73,lat_0=42,resolution='l',
 m.drawcoastlines()
 m.drawcountries()
 m.drawstates()
-     
-    
-        
-# ######################################################################
-# bin the epicenters (adapted from 
-# http://stackoverflow.com/questions/11507575/basemap-and-density-plots)
     
 # compute appropriate bins to chop up the data:
 db = 1 # bin padding
@@ -265,21 +235,21 @@ plt.register_cmap(cmap=custom_map)
 plt.pcolormesh(xs, ys, density, cmap="custom_map")
 
 cbar = plt.colorbar(orientation='horizontal', shrink=0.625, aspect=20, fraction=0.2,pad=0.02)
-cbar.set_label('Number of Jobs',size=18)
+cbar.set_label('Number of Jobs',size=22)
 #plt.clim([0,100])
     
     
-# translucent blue scatter plot of epicenters above histogram:    
+# translucent blue scatter plot of jobs above histogram:    
 x,y = m(list(lons), list(lats))
 m.plot(x, y, 'o', markersize=8,zorder=6, markerfacecolor='#424FA4',markeredgecolor="none", alpha=0.33)
      
         
-# http://matplotlib.org/basemap/api/basemap_api.html#mpl_toolkits.basemap.Basemap.drawmapscale
-m.drawmapscale(-119-6, 37-7.2, -119-6, 37-7.2, 500, barstyle='fancy', yoffset=20000)
+## http://matplotlib.org/basemap/api/basemap_api.html#mpl_toolkits.basemap.Basemap.drawmapscale
+#m.drawmapscale(-119-6, 37-7.2, -119-6, 37-7.2, 500, barstyle='fancy', yoffset=20000)
         
         
 # make image bigger:
-plt.gcf().set_size_inches(15,15)
+plt.gcf().set_size_inches(12,8)
 
 plt.savefig('heat_scatter_eastcoast_zoom.png')
 plt.clf()
