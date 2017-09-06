@@ -35,7 +35,7 @@ def get_job_info(job):
     """
         We'll want: job title, company, location, 
                     salary (if given), company size, 
-                    company rating... Maybe more.
+                    company rating, and a job summary.
     """
 
     try:
@@ -94,7 +94,7 @@ def get_next_page(soup):
 
 
 ####################################################################################
-sleep_time = 1
+sleep_time = 5 # wait 5 seconds before going to the next page
 number_of_pages = 60
 job_type = ['artificial', 'intelligence']
 
@@ -107,13 +107,12 @@ soup = BeautifulSoup(html, 'html5lib')
 jobs = soup.find_all('div', {'class':' row result'})
 
 next_page_number = 2
-time.sleep(sleep_time) # wait a little while in case there is a limit on how quickly we can
+time.sleep(sleep_time) # it's polite to wait a little bit
 while next_page_number <= number_of_pages:
 
 
     try:
         new_url = get_next_page(soup)
-#        print'After %d pages, we have %d jobs'%(next_page_number - 1, len(jobs))
         new_html = requests.get(new_url).text
         new_soup = BeautifulSoup(new_html, 'html5lib')
 
