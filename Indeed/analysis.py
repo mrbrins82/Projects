@@ -12,6 +12,7 @@ from mpl_toolkits.basemap import shiftgrid
 from geopy.geocoders import Nominatim
 from matplotlib.colors import LinearSegmentedColormap
 
+# load the job csv files and the csv with coordinates
 ai_df = pd.read_csv('new_artificial_intelligence_jobs.csv')
 ds_df = pd.read_csv('new_data_scientist_jobs.csv')
 ml_df = pd.read_csv('new_machine_learning_jobs.csv')
@@ -27,16 +28,14 @@ locations_df = locations_df.drop_duplicates()
 df.location = df.location.replace(to_replace='Santa Clara Valley, CA', value='Santa Clara, CA')
 locations_df.city = locations_df.city.replace(to_replace='Santa Clara Valley, CA', value='Santa Clara, CA')
 
-del(ai_df, ds_df, ml_df, temp_df, all_df)
-
-print 'df.count()'
-print df.count()
-print ''
+del(ai_df, ds_df, ml_df, temp_df, all_df) # don't need these anymore
 
 
+# create longitude/latitude features in the jobs dataframe
 df['longitude'] = 0.
 df['latitude'] = 0.
 
+# fill in the lon/lat features
 no_coords = 0
 n_jobs = df.shape[0]
 # give all of the cities coordinates
@@ -60,9 +59,8 @@ for ii in xrange(n_jobs):
 
 print 'Jobs with no coordinates --> %d'%no_coords
 
-
-
-
+###############################################################
+# begin making the job histograms/scatter plots
 lons = df.longitude.dropna()
 lats = df.latitude.dropna()
     
@@ -255,138 +253,3 @@ plt.savefig('heat_scatter_eastcoast_zoom.png')
 plt.clf()
 os.system('open heat_scatter_eastcoast_zoom.png')
 
-
-exit()
-#####################################
-# Make a "heatmap" for job locations
-#####################################
-plot_lon = df.longitude.dropna()
-plot_lat = df.latitude.dropna()
-
-Map = Basemap(llcrnrlon=-119, llcrnrlat=20, urcrnrlon=-64, urcrnrlat=49,
-              resolution='i', projection='lcc', lat_1=32, lat_2=45, lon_0=-95)
-##              resolution='i', projection='cass', lat_0=35.5, lon_0=-91.5)
-
-#Map = Basemap(projection='merc', resolution='h',
-#              llcrnrlon=-128, llcrnrlat=22, urcrnrlon=-64, urcrnrlat=52)
-
-##############################################################################
-
-# makes a scatterplot with marker sizes and transparencies related to
-# number of jobs at the location
-for ii in xrange(n_jobs):
-        
-#    print city, count
-#    city_stem = city.partition('(')[0].rstrip()
-    try:
-#        loc = geolocator.geocode(city_stem)
-#        print city_stem
-#        print loc.longitude, loc.latitude
-
-        longitude = df.longitude.iloc[ii]
-        latitude = df.latitude.iloc[ii]
-
-        x, y = Map(longitude, latitude)
-        Map.plot(x, y, marker='o', color='Red', alpha=0.1, markersize=5)
-    except:
-        print 'There was a problem'
-
-#Map.plot(plot_lon, plot_lat, marker='o', color='red', alpha=0.3)
-
-Map.drawcoastlines()
-Map.drawcountries()
-Map.drawstates()
-plt.savefig('job_scatter.png')
-plt.clf()
-os.system('open job_scatter.png')
-exit()
-
-
-######################################################################
-# make a 2d histogram over the US
-# remove points outside projection limb.
-"""
-fig = plt.figure()#figsize=(8,5))
-ax = fig.add_subplot(111)
-bins=50
-#bincount, xedges, yedges = np.histogram2d(plot_lon, plot_lat, bins=bins)
-#mask = bincount == 0
-## reset zero values to one to avoid divide-by-zero
-#bincount = np.where(bincount == 0, 1, bincount)
-#H, xedges, yedges = np.histogram2d(plot_lon, plot_lat, bins=bins)
-#H = np.ma.masked_where(mask, H/bincount)
-
-plt.hist2d(plot_lon, plot_lat, bins=80)
-plt.xlim(xmin=plot_lon.min() - 1, xmax=plot_lon.max() + 1)
-plt.ylim(ymin=plot_lat.min() - 1, ymax=plot_lat.max() + 1)
-## set color of masked values to axes background (hexbin does this by default)
-#palette = plt.cm.jet
-#palette.set_bad(ax.get_axis_bgcolor(), 1.0)
-#CS = Map.pcolormesh(xedges,yedges,H.T,shading='flat',cmap=palette)
-# draw coastlines, lat/lon lines.
-Map.drawcoastlines()
-Map.drawstates()
-Map.colorbar(location="bottom",label="# jobs") # draw colorbar
-#plt.title('histogram2d', fontsize=20)
-
-#plt.gcf().set_size_inches(18,10)
-plt.show()
-plt.clf()
-exit()
-"""
-
-Map.scatter(plot_lon, plot_lat)
-plt.xlim(xmin=-130, xmax=-60)
-plt.ylim(ymin=20, ymax=50)
-plt.colorbar()
-plt.savefig('simple_scatter.png')
-plt.clf()
-os.system('open simple_scatter.png')
-exit()
-
-###############################################################
-lons = np.arange(-135, -60, 1)
-print 'lons: ',lons
-lats = np.arange(20, 55, 1)
-print 'lats: ',lats
-
-data = np.indices((lats.shape[0], lons.shape[0]))
-print 'data: ',data
-data = data[0] + data[1]
-print 'data: ',data
-print 'data.shape: ',data.shape
-
-data_interp, x, y = Map.transform_scalar(data, lons, lats, 100, 50, returnxy=True, masked=True)
-
-Map.pcolormesh(x, y, data_interp, cmap='summer')
-#Map.bluemarble()
-##Fill the globe with a blue color 
-#Map.drawmapboundary(fill_color='aqua')
-##Fill the continents with the land color
-#Map.fillcontinents(color='coral',lake_color='aqua')
-Map.drawcountries()
-Map.drawstates(color='0.5')
-Map.drawcoastlines()
-
-
-#temp = [['San Francisco',100],
-#        ['Pittsburgh',69],
-#        ['Pittsburgh, PA',25],
-#        ['Cleveland, OH', 9]]
-
-#geolocator = Nominatim()
-#for (city,count) in cities.iteritems():
-#    print city,count
-#    if count > 1:
-#        try:
-#            loc = geolocator.geocode(city)
-#            x, y = Map(loc.longitude, loc.latitude)
-#            Map.plot(x, y, marker='o', color='Red', alpha=1/np.sqrt(count), markersize=3*np.sqrt(count))
-#        except:
-#            print 'Could not geolocate for --> %s'%city
-
-
-plt.savefig('jobmap.png')
-plt.clf()
-
-os.system('open jobmap.png')
