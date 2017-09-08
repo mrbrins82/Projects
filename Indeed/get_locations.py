@@ -1,4 +1,4 @@
-#! usr/bin/env python
+#!/usr/bin/env python
 import numpy as np
 import pandas as pd
 import os
@@ -6,9 +6,9 @@ import os
 from geopy.geocoders import Nominatim
 
 # load job files
-ai_df = pd.read_csv('new_artificial_intelligence_jobs.csv')
-ds_df = pd.read_csv('new_data_scientist_jobs.csv')
-ml_df = pd.read_csv('new_machine_learning_jobs.csv')
+ai_df = pd.read_csv('jobs_artificial_intelligence.csv')
+ds_df = pd.read_csv('jobs_data_scientist.csv')
+ml_df = pd.read_csv('jobs_machine_learning.csv')
 
 # make one data frame out of all job files and drop duplicates
 temp_df = pd.concat((ai_df, ds_df))
@@ -16,9 +16,6 @@ all_df = pd.concat((temp_df, ml_df))
 
 df = all_df.drop_duplicates()
 df.location = df.location.replace(to_replace='Santa Clara Valley, CA', value='Santa Clara, CA')
-
-# we don't need these anymore
-del(ai_df, ds_df, ml_df, temp_df, all_df)
 
 # load existing cities and coordinates
 locations_df = pd.read_csv('locations.csv')
