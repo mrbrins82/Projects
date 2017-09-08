@@ -11,11 +11,11 @@ from geopy.geocoders import Nominatim
 from matplotlib.colors import LinearSegmentedColormap
 
 # load the job csv files and the csv with coordinates
-ai_df = pd.read_csv('new_artificial_intelligence_jobs.csv')
+ai_df = pd.read_csv('jobs_artificial_intelligence.csv')
 ai_df['keyword'] = 'AI'
-ds_df = pd.read_csv('new_data_scientist_jobs.csv')
+ds_df = pd.read_csv('jobs_data_scientist.csv')
 ds_df['keyword'] = 'DS'
-ml_df = pd.read_csv('new_machine_learning_jobs.csv')
+ml_df = pd.read_csv('jobs_machine_learning.csv')
 ml_df['keyword'] = 'ML'
 locations_df = pd.read_csv('locations.csv')
 
