@@ -4,32 +4,6 @@ import time
 import os
 
 from bs4 import BeautifulSoup
-from geopy.geocoders import Nominatim
-
-coords_dict = dict()
-
-#def get_location_coords(city):
-#    """
-#    """
-#    # for some reason, geolocator can't find coords
-#    # for Santa Clara Valley, CA, but it can for
-#    # Santa Clara, CA.
-#    if city == 'Santa Clara Valley, CA':
-#        city = 'Santa Clara, CA'
-#
-#    if coords_dict.has_key(city):
-#        longitude = coords_dict[city][0]
-#        latitude = coords_dict[city][1]
-#    else:
-#        geolocator = Nominatim()
-#        loc = geolocator.geocode(city)
-#
-#        coords_dict[city] = [loc.longitude, loc.latitude]
-#
-#        longitude = loc.longitude
-#        latitude = loc.latitude
-#
-#    return longitude, latitude
 
 def get_job_info(job):
     """
@@ -59,12 +33,12 @@ def get_job_info(job):
         salary = 'NA'
 
     try:
-        company_size =  int(job.find('span', 'slNoUnderline').text.split()[0]) # assume the number of company ratings scales linearly with size
+        company_size =  int(job.find('span', 'slNoUnderline').text.split()[0]) # use number of company ratings as metric for company size
     except:
         company_size = 'nan'
 
     try:
-        company_rating = float(job.find('span', 'rating').get('style')[6:10])
+        company_rating = float(job.find('span', 'rating').get('style')[6:10]) # Each company's star rating is given by pixel width
     except:
         company_rating = 'nan'
     
@@ -95,21 +69,19 @@ def get_next_page(soup):
 
 ####################################################################################
 sleep_time = 5 # wait 5 seconds before going to the next page
-number_of_pages = 60
+number_of_pages = 60 # max number of pages to scrape from
 job_type = ['artificial', 'intelligence']
 
 home = 'https://www.indeed.com'
 url = home + '/jobs?q=%s+%s'%(job_type[0], job_type[1])
-print 'First page --> ', url
 html = requests.get(url).text
 soup = BeautifulSoup(html, 'html5lib')
 
 jobs = soup.find_all('div', {'class':' row result'})
 
 next_page_number = 2
-time.sleep(sleep_time) # it's polite to wait a little bit
+time.sleep(sleep_time)
 while next_page_number <= number_of_pages:
-
 
     try:
         new_url = get_next_page(soup)
@@ -131,7 +103,7 @@ while next_page_number <= number_of_pages:
 
 
 # write all of the lines to a .csv file
-filename = 'new_' + job_type[0] + '_' + job_type[1] + '_jobs.csv'
+filename = 'jobs_' + job_type[0] + '_' + job_type[1] + '.csv'
 if os.path.exists(filename):
     os.system('rm ' + filename)
 
