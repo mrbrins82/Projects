@@ -4,21 +4,28 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 import seaborn as sns
 import os, sys
+
+"""
+get_locations is my own script that get coordinates from 
+the city locations in the job csv files. Uncomment the 
+'import get_locations' line if new jobs/locations have
+been added.
+"""
 #import get_locations
 
 from mpl_toolkits.basemap import Basemap
-from geopy.geocoders import Nominatim
 from matplotlib.colors import LinearSegmentedColormap
 
 # load the job csv files and the csv with coordinates
 ai_df = pd.read_csv('jobs_artificial_intelligence.csv')
-ai_df['keyword'] = 'AI'
 ds_df = pd.read_csv('jobs_data_scientist.csv')
-ds_df['keyword'] = 'DS'
 ml_df = pd.read_csv('jobs_machine_learning.csv')
-ml_df['keyword'] = 'ML'
 locations_df = pd.read_csv('locations.csv')
 
+# tag each data frame by it's job keyword search
+ai_df['keyword'] = 'AI'
+ds_df['keyword'] = 'DS'
+ml_df['keyword'] = 'ML'
 
 print 'ai_df.shape'
 print 'ds_df.shape'
